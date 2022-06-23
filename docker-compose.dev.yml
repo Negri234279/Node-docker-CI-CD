@@ -18,5 +18,24 @@ services:
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=dev
       - APP_PORT=${APP_PORT}
+    depends_on:
+      - db
+    links:
+      - db
     command: npm run dev
-    
+
+  db:
+    image: postgres:14.1-alpine
+    restart: always
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+    ports:
+      - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+volumes:
+  db:
+    driver: local
