@@ -1,0 +1,22 @@
+version: '3'
+services:
+  backend:
+    container_name: node-docker-ci-cd
+    build:
+      context: .
+      args:
+        - NODE_ENV=dev
+      dockerfile: Dockerfile
+    image: node-docker-ci-cd
+    ports:
+      - 3010:${APP_PORT}
+    volumes:
+      - ./src:/app/src
+    env_file:
+      - ./.env
+    environment:
+      - CHOKIDAR_USEPOLLING=true
+      - NODE_ENV=dev
+      - APP_PORT=${APP_PORT}
+    command: npm run dev
+    
