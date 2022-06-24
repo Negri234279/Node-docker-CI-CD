@@ -8,6 +8,7 @@ const PORT = process.env.APP_PORT
 const app = express()
 app.use(express.json())
 app.use(morgan('dev'))
+//app.disable('x-powered-by') - The header is removed in the nginx proxy
 
 const pool = new Pool({
     user: process.env.DB_USER,
