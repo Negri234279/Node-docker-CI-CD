@@ -1,7 +1,7 @@
-require('dotenv').config() 
-const express = require('express')
-const morgan = require('morgan')
-const { Pool } = require('pg')
+import 'dotenv/config'
+import express from 'express'
+import postgres from 'pg'
+import morgan from  'morgan'
 
 const PORT = process.env.APP_PORT
 
@@ -10,7 +10,7 @@ app.use(express.json())
 app.use(morgan('dev'))
 //app.disable('x-powered-by') - The header is removed in the nginx proxy
 
-const pool = new Pool({
+const pool = new postgres.Pool({
     user: process.env.DB_USER,
     password: process.env.DB_PASSWORD,
     host: process.env.DB_HOST,
