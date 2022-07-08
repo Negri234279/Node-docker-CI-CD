@@ -49,14 +49,14 @@ server {
 
 ## Description
 
-* BACKEND_PORT: port of the node api and used by the nginx proxy
-* BACKEND_NAME: container name of the node api and used by the nginx proxy
-* DB_HOST: name of the database container and used by the api for its connection
-* DB_PORT: database port used by the api for its connection
-* DB_USER:  database user and used by the api for its connection
-* DB_PASSWORD: database password and used by the api for its connection
-* DB_NAME: database name and used by the api for its connection
-* NGINX_PORT: nginx proxy port, port used to communicate with the api
+* **BACKEND_PORT**: port of the node api and used by the nginx proxy
+* **BACKEND_NAME**: container name of the node api and used by the nginx proxy
+* **DB_HOST**: name of the database container and used by the api for its connection
+* **DB_PORT**: database port used by the api for its connection
+* **DB_USER**:  database user and used by the api for its connection
+* **DB_PASSWORD**: database password and used by the api for its connection
+* **DB_NAME**: database name and used by the api for its connection
+* **NGINX_PORT**: nginx proxy port, port used to communicate with the api
 
 
 ## How the network works ?
