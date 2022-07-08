@@ -2,10 +2,10 @@ version: '3'
 services:
   backend:
     container_name: nodejs-backend
+    restart: always
     build:
       context: .
-      args:
-        - NODE_ENV=dev
+      args: [NODE_ENV=dev]
       dockerfile: Dockerfile
     image: node-docker-ci-cd
     #ports:
@@ -13,13 +13,11 @@ services:
     volumes:
       - ./:/app
       - /app/node_modules
-    env_file:
-      - ./.env
+    env_file: ./.env
     environment:
       - CHOKIDAR_USEPOLLING=true
       - NODE_ENV=dev
-    depends_on:
-      - postgres
+    depends_on: [postgres]
     command: npm run dev
 
   postgres:
@@ -30,8 +28,7 @@ services:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
       - POSTGRES_DB=${DB_NAME}
-    env_file:
-      - ./.env
+    env_file: ./.env
     #ports:
     #  - '${DB_PORT}:5432'
     volumes: 
@@ -45,15 +42,13 @@ services:
     environment:
       - BACKEND_NAME=${BACKEND_NAME}
       - BACKEND_PORT=${BACKEND_PORT}
-    env_file:
-      - ./.env
+    env_file: ./.env
     ports:
       - '${NGINX_PORT}:80'
     volumes:
       - ./nginx/templates/default.conf.template:/etc/nginx/templates/default.conf.template
       - ./nginx/custom_404.html:/usr/share/nginx/html/custom_404.html
-    depends_on:
-      - backend
+    depends_on: [backend]
 
 
 volumes:

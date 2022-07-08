@@ -1,20 +1,52 @@
 version: '3'
 services:
   backend:
-    container_name: node-docker-ci-cd
+    container_name: nodejs-backend
     build:
       context: .
-      args:
-        - NODE_ENV=production
+      args: [NODE_ENV=production]
       dockerfile: Dockerfile
     image: node-docker-ci-cd
-    ports:
-      - 3010:${APP_PORT}
+    #ports:
+    #  - ${APP_PORT_EXPOSE}:${APP_PORT}
     volumes:
-      - ./src:/app/src
-    env_file:
-      - ./.env
+      - /app/node_modules
+    env_file: ./.env
+    environment: [NODE_ENV=production]
+    depends_on: [postgres]
+    command: npm run dev
+
+  postgres:
+    image: postgres:14.1-alpine
+    container_name: postgres-db
+    restart: always
     environment:
-      - NODE_ENV=production
-      - APP_PORT=${APP_PORT}
-    
+      - POSTGRES_USER=${DB_USER}
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+    env_file: ./.env
+    #ports:
+    #  - '${DB_PORT}:5432'
+    volumes: 
+      - postgres-db:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/create_tables.sql
+
+  nginx:
+    image: nginx:stable-alpine
+    container_name: nginx-proxy
+    restart: always
+    environment:
+      - BACKEND_NAME=${BACKEND_NAME}
+      - BACKEND_PORT=${BACKEND_PORT}
+    env_file: ./.env
+    ports:
+      - '${NGINX_PORT}:80'
+    volumes:
+      - ./nginx/templates/default.conf.template:/etc/nginx/templates/default.conf.template
+      - ./nginx/custom_404.html:/usr/share/nginx/html/custom_404.html
+    depends_on: [backend]
+
+
+volumes:
+  postgres-db:
+    driver: local
