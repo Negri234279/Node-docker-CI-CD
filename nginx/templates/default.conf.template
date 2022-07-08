@@ -7,7 +7,7 @@ server {
 
         proxy_set_header Host $http_host;
         proxy_set_header X-Nginx-Proxy true;
-        proxy_pass http://nodejs-backend:4000;
+        proxy_pass http://${BACKEND_NAME}:${BACKEND_PORT};
         proxy_redirect off;
         proxy_hide_header X-Powered-By;
     }
@@ -16,7 +16,6 @@ server {
     location = /50x.html {
         root   html;
     }
-
     
     error_page 404 /custom_404.html;
     location = /custom_404.html {
